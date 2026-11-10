@@ -9,3 +9,5 @@ matplotlib~=3.8.2
 numba~=0.58.1
 h5py~=3.10.0
 zlib-ng~=0.2.0
+denoising-diffusion-pytorch==1.9.4
+einops>=0.7,<1
