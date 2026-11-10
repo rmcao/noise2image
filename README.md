@@ -9,6 +9,8 @@
     <a style="text-decoration:none !important;" href="https://opg.optica.org/abstract.cfm?uri=optica-12-1-46" alt="arXiv"> <img src="https://img.shields.io/badge/paper-pdf-y31b1b.svg?style=flat" /></a>
     <a style="text-decoration:none !important;" href="https://berkeley.box.com/s/z9s21gs3tyrfpngzl9he66mr9s4kp1up" alt="DOI"><img src="https://img.shields.io/badge/Dataset-Box-fedcba.svg?style=flat" /></a>
     <a style="text-decoration:none !important;" href="https://www.kaggle.com/datasets/ruimingc/noise2image-for-event-cameras" alt="DOI"><img src="https://img.shields.io/badge/Dataset-backup-badcba.svg?style=flat" /></a>
+    <a style="text-decoration:none !important;" href="https://huggingface.co/rmcao/Noise2Image" alt="DOI"><img src="https://img.shields.io/badge/Model-HuggingFace-yellow?style=flat" /></a>
+    
 </p>
 
 ## Requirements
@@ -33,7 +35,17 @@
 1. Download dataset from [Box drive](https://berkeley.box.com/s/z9s21gs3tyrfpngzl9he66mr9s4kp1up) or [Kaggle](https://www.kaggle.com/datasets/ruimingc/noise2image-for-event-cameras)
 2. Unzip them into `data` folder
 
+## Pretrained checkpoint using experimental data
+
+Available in [HuggingFace](https://huggingface.co/rmcao/Noise2Image). This checkpoint was trained with `--pixel-bin 2`, `--time-bin 1`, `--polarity`, `--integration-time-s 1.0`.
+
 ## Usage
+
+- Inference using pretrained checkpoint
+    ```
+    python infer.py --checkpoint weights/noise2image.pt --events path/to/sample.h5 --image path/to/sample.jpg --device cuda:0
+    ```
+
 - Train & evaluate using experimental data
     ```
     python train.py --polarity
