@@ -2,3 +2,7 @@
 *.h5
 .DS_Store
 notebooks
+__pycache__/
+data/
+outputs/
+weights/
