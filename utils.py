@@ -214,7 +214,7 @@ class EventImagePairDataset(Dataset):
     def __init__(self, image_folder, event_folder,
                  integration_time_s=1, total_time_s=10, start_time_s=-1, time_bin=1, pixel_bin=1,
                  polarity=False, std_channel=False, n_limit=None, transform=None,
-                 img_suffix='.jpg', calib_img_path=None):
+                 img_suffix='.jpg', calib_img_path=None, image_names=None):
         """
         :param image_folder: folder containing images
         :param event_folder: folder containing event recordings
@@ -229,9 +229,11 @@ class EventImagePairDataset(Dataset):
         :param transform: transform to apply to the image and event count matrix for data augmentation
         :param img_suffix: image file suffix. Default is '.jpg'
         :param calib_img_path: path to the calibration image
+        :param image_names: optional filenames to load instead of scanning the image folder
         """
         super().__init__()
-        _image_files = [f for f in sorted(os.listdir(image_folder)) if f.endswith(img_suffix)]
+        _image_files = ([f for f in sorted(os.listdir(image_folder)) if f.endswith(img_suffix)]
+                        if image_names is None else list(image_names))
         image_files, images, event_files, event_images = [], [], [], []
         self.event_dim_xy = [1280, 720]
         self.output_dim_xy = [1280 // pixel_bin, 720 // pixel_bin]
@@ -275,6 +277,8 @@ class EventImagePairDataset(Dataset):
             else np.clip(np.random.normal(1.0, 4), 1.0, self.total_time_s).astype(np.float32)
 
         events = self.load_events(self.event_files[idx], integration_time_s)
+        if not len(events):
+            raise ValueError(f'No events in the requested interval for {self.event_files[idx]}')
         time_bin_start = np.linspace(events['t'][0], events['t'][-1], self.time_bin + 1)[:-1]
         bin_ind = np.searchsorted(events['t'], time_bin_start, side='right')
         events['x'] = events['x'] // self.pixel_bin
